@@ -1,0 +1,1 @@
+export enum Option {Registration, Auth, Messenger, Friends}
