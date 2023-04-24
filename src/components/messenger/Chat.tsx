@@ -27,13 +27,13 @@ function Chat({chat, back}:Props){
 
     if(chat){
         return(
-            <div className="chat flex flex-col">
-                <span className="chat-info flex flex-row items-center bg-gray-200">
-                    <button onClick={back} className="bg-white basis-1/3">Back</button>
+            <div className="chat flex flex-col h-full">
+                <span className="chat-info flex flex-row items-center">
+                    <button onClick={back} className="basis-1/3">Back</button>
                     <h1 className="basis-1/3 flex justify-center">{chat.person.username}</h1>
                 </span>
-                <div className="flex h-full flex-col justify-end">
-                    <MessageList messages={chat.messages}/>
+                <MessageList messages={chat.messages}/>         
+                <div className="mt-auto">
                     <ChatControls submit={sendMessage}/>
                 </div>
             </div>

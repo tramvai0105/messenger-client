@@ -24,17 +24,20 @@ function ChatControls({submit}:Props){
 
     function send(msg:string){
         setMsgInput("");
-        submit(msg);
+        if(msg !== ""){
+            submit(msg);
+        }
         if(inputRef.current){
             inputRef.current.style.height = "40px";
         }
     }
 
     return(
-        <div className="chat-controls flex flex-row">
+        <div className="chat-controls bg-gray-100
+         flex flex-row p-3 border-solid border rounded-b-xl h-16">
             <textarea ref={inputRef} style={{height:`40px`}}
             value={msgInput} onChange={(e)=>controlInput(e)} 
-            className='chat-input overflow-y-hidden p-2 h-auto'/>
+            className='chat-input overflow-y-hidden p-2'/>
             <button className="bg-blue-200" onClick={()=>send(msgInput)}>Send</button>
         </div>        
     )

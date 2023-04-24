@@ -41,13 +41,13 @@ function RequestsList(){
     }
 
     return(
-        <div className='w-9/12 h-full border border-solid'>
+        <div className='h-full'>
             {requests?.map((request, i)=>
-            <div className='border border-solid w-full flex items-center pl-5 h-10' key={i}>
+            <div className='w-full flex items-center pl-5 h-10' key={i}>
                 {request.username}
                 {(socket.token) 
                 ? <button onClick={()=>acceptFriend(request._id)} 
-                    className='border p-1 border-solid border-gray-700'>Add to friends</button>
+                    className='p-1'>Add to friends</button>
                 : <></>}
             </div>
             )}

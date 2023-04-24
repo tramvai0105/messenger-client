@@ -12,6 +12,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import socket from './store/socket';
 import { observer } from 'mobx-react-lite';
 import Authorization from './components/Authorization';
+import Header from './components/Header';
 
 function App() {
 
@@ -29,7 +30,7 @@ function App() {
   },[])
 
   return (
-    <div className="App pl-80 flex flex-row">
+    <div className="App flex">
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Navigation/>}>

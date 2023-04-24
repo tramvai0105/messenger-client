@@ -43,15 +43,15 @@ function FriendsList(){
     }
 
     return(
-        <div className='w-9/12 h-full border border-solid'>
+        <div className='h-full'>
             {friends?.map((friend, i)=>
-            <div className='border border-solid w-full flex justify-between items-center pl-5 pr-7 h-10' key={i}>
+            <div className='bw-full flex justify-between items-center pl-5 pr-7 h-10' key={i}>
                 {friend.username}
                 <div className='flex flex-row'>
                     <NewChat username={friend.username}/>
                     {(socket.token) 
                     ? <button onClick={()=>removeFriend(friend._id)} 
-                        className='border p-1 border-solid border-gray-700'>Remove friend</button>
+                        className='p-1'>Remove friend</button>
                     : <></>}
                 </div>
             </div>

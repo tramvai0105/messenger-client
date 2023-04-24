@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite"
 import socket from "../../store/socket";
 import chats from '../../store/chats';
 import messengerUtils from './messenge.utils';
+import React from 'react';
 
 // interface LoginData{
 //     username: string,
@@ -134,13 +135,10 @@ function Messenger(){
     // }
 
     return(
-        <div className="flex flex-cols basis-1/3">
-            <div className="messenger border border-solid">  
+        <React.Fragment>
             {(chats.stage == Stage.List) ? <ChatList select={selectChat} chats={chats.chats}/> : <></>}
             {(chats.stage == Stage.Chat) ? <Chat back={backToList} chat={chats.selectedChat}/> : <></>}
-            </div>
-        </div>
-        
+        </React.Fragment>    
     )  
 }
 
