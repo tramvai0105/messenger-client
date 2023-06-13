@@ -1,3 +1,4 @@
+import socket from "../../store/socket";
 import { Message } from "../../utils/types";
 
 function getMessagesForUser(username:string, msgs: Message[]){
@@ -13,8 +14,22 @@ function getMessagesForUser(username:string, msgs: Message[]){
     return sortedMsgs;
 }
 
+async function getAvatars(users: string[]){
+    const res = await fetch("http://localhost:5000/file/getavatars", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': `Bearer ${socket.token}`,
+          },
+        body: JSON.stringify({users: users}),
+    });
+    const {avatars} = await res.json();
+    return new Map<string, string>(avatars);
+}
+
 const messengerUtils = {
     getMessagesForUser: getMessagesForUser,
+    getAvatars: getAvatars,
 };
 
 export default messengerUtils;

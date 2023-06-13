@@ -5,6 +5,7 @@ export type ChatElement = {
 
 export type Person = {
     username: string,
+    avatar: string,
 }
 
 export type Message = {

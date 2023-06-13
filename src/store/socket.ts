@@ -8,6 +8,7 @@ class Socket{
     socket : WebSocket | null = null;
     token : Token | null = null;
     username : string | null = null;
+    avatar : string | undefined = undefined;
 
     makeSocket(){
         if(this.socket === null || this.socket.readyState === WebSocket.CLOSED){
@@ -33,7 +34,11 @@ class Socket{
     }
 
     setTocken(tocken: Token){
-        this.token = tocken
+        this.token = tocken;
+    }
+
+    setAvatar(avatar : string){
+        this.avatar = avatar;
     }
 
     constructor(){

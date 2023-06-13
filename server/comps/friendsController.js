@@ -39,7 +39,7 @@ class friendsController{
             return res.status(400).json({message: "Заявка уже отправлена"})
         }
         friends.requests.push(id)
-        friends.save()
+        await friends.save()
         return res.status(200).json({message:"Заявка в друзья отправлена."})
     }
 
@@ -47,7 +47,7 @@ class friendsController{
         const {friendId} = req.body;
         const {id} = req.user;
         let friends = await Friends.findOne({userId: id});
-        let friendsOfFriend = await Friends.findOne({userId: id});
+        let friendsOfFriend = await Friends.findOne({userId: friendId});
         if(!friends.requests.includes(friendId.toString())){
             return res.status(400).json({message: "Нет такой заявки"})
         }
@@ -57,19 +57,19 @@ class friendsController{
         friends.requests = friends.requests.filter(item => item !== friendId.toString());
         friendsOfFriend.friends.push(id);
         friends.friends.push(friendId);
-        friends.save()
-        friendsOfFriend.save()
+        await friends.save()
+        await friendsOfFriend.save()
         return res.json({message: "Друг добавлен!"})
     }
 
     async removeFriend(req, res){
         const {friendId} = req.body;
         const {id} = req.user;
-        let friends = await Friends.findOne({userId: id})
+        let friends = await Friends.findOne({username: id})
         if(friends.friends.includes(friendId.toString())){
             friends.friends = friends.friends.filter(item => item !== friendId.toString());
         }
-        friends.save()
+        await friends.save()
         return res.json({message: "Друг удален!"})
     }
 }

@@ -9,17 +9,23 @@ const path = require("path");
 const db = require('mongoose');
 const authRouter = require("./comps/authRouter");
 const friendsRouter = require("./comps/friendsRouter");
+const fileRouter = require("./comps/fileRouter");
 const jwt = require("jsonwebtoken");
 const {secret} = require("./config");
 const User = require("./models/User");
 const Message = require("./models/Message");
 const wsutils = require("./utils/wsutils");
 const authMiddleware = require("./middleware/authMiddleware");
+const fileUpload = require("express-fileupload")
 
 app.use(cors());
+app.use(fileUpload({}))
 app.use(express.json());
 app.use('/auth', authRouter);
 app.use('/friends', friendsRouter);
+app.use('/file', fileRouter);
+app.use('/images', express.static('images'));
+
 
 async function mongoConnection() {
   await db.connect('mongodb://127.0.0.1:27017/soc');

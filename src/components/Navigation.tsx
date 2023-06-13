@@ -5,8 +5,16 @@ import { observer } from "mobx-react-lite";
 import Header from "./Header";
 import NavButtons from "./NavButtons";
 import Profile from './Profile';
+import { useEffect } from 'react';
 
 function Navigation(){
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(!window.localStorage.getItem("userData")){
+            navigate('../auth', { replace: false })
+        }
+    }, [])
 
     return(
         <div className="flex flex-col w-full items-center h-full">
@@ -18,7 +26,8 @@ function Navigation(){
                         <NavButtons/>
                     </div>
                     <div className="flex justify-center">
-                        <div className="ml-20 w-[650px] h-[95%] bg-white rounded-xl">
+                        <div className="ml-20 w-[650px] h-[95%] bg-white 
+                        rounded-bl-xl rounded-br-xl">
                             <Outlet/>
                         </div>
                     </div>

@@ -42,12 +42,23 @@ class authController{
             return res.status(400).json({message:`Неправильный пароль`});
         }
         const token = generateAccessToken(user._id);
-        return res.json({token})
+        return res.json({token, avatar: user.avatar})
     }
 
-    async getUsers(req, res){
-        const users = await User.find();
-        res.json(users)
+    async check(req, res){
+        try{
+            if(!req.headers.authorization){
+                return res.status(400).json({message:"Заголовок токена не предоставлен"})
+            }
+            const token = req.headers.authorization.split(" ")[1];
+            if(!token){
+                return res.status(400).json({message:"Пользователь не авторизован"})
+            }
+            const decodedData = jwt.verify(token, secret);
+            return res.status(200).json({message:"Пользователь не авторизован"})
+        }catch(e){
+            return res.status(400).json({message:"Токен истек"})
+        }
     }
 }
 

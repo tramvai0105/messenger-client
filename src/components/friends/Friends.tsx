@@ -3,16 +3,24 @@ import FriendsList from "./FriendsList";
 import { useState, useEffect } from 'react';
 import UsersList from "./UsersList";
 import RequestsList from "./RequestsList";
+import { observer } from "mobx-react-lite";
 
-enum FriendsMenu{Users, Friends, Requests}
+enum FriendsMenu{Users, Friends, Requests, Load}
 
 function Friends(){
 
-    const [menu, setMenu] = useState<FriendsMenu>(FriendsMenu.Friends)
+    const [menu, setMenu] = useState<FriendsMenu>(FriendsMenu.Load)
+
+    useEffect(()=>{
+        if(socket.token){
+            setMenu(FriendsMenu.Friends);
+        }
+    }, [socket.token])
 
     return(
         <div className="flex h-full">
             <div className="w-10/12">
+                {(menu == FriendsMenu.Load) ? <div className="w-full h-full flex items-center justify-center">Loading...</div> : <></>}
                 {(menu == FriendsMenu.Friends) ? <FriendsList/> : <></>}
                 {(menu == FriendsMenu.Users) ? <UsersList/> : <></>}
                 {(menu == FriendsMenu.Requests) ? <RequestsList/> : <></>}
@@ -29,4 +37,6 @@ function Friends(){
     )
 }
 
-export default Friends;
+const FriendsObserver = observer(Friends);
+
+export default FriendsObserver;

@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import socket from '../../store/socket';
 import NewChat from './NewChat';
+import Avatar from '../utils/Avatar';
+import messengerUtils from '../messenger/messenge.utils';
 
 interface User{
     _id: string,
     username: string,
+    avatar: string,
 }
 
 
@@ -13,8 +16,7 @@ function FriendsList(){
     const [friends, setFriends] = useState<User[] | null>(null)
 
     useEffect(()=>{
-        if(socket.token){
-            getFriends()}
+        getFriends();
     }, [])
     
     async function getFriends() {
@@ -26,6 +28,14 @@ function FriendsList(){
             },
           })
         let {friends, message} = await res.json()
+        let persons = []
+        for(let i = 0; i < friends.length; i++){
+            persons.push(friends[i].username)
+        }
+        let avatars = await messengerUtils.getAvatars(persons)
+        for(let i = 0; i < friends.length; i++){
+            friends[i].avatar = avatars.get(friends[i].username)
+        }
         setFriends(friends)
     }
 
@@ -46,7 +56,7 @@ function FriendsList(){
         <div className='h-full'>
             {friends?.map((friend, i)=>
             <div className='bw-full flex justify-between items-center pl-5 pr-7 h-10' key={i}>
-                {friend.username}
+                <Avatar r={32} avatar={friend.avatar}/> {friend.username}
                 <div className='flex flex-row'>
                     <NewChat username={friend.username}/>
                     {(socket.token) 

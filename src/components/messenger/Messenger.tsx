@@ -17,11 +17,15 @@ import React from 'react';
 //     token: string,
 // }
 
+interface AvatarData {
+    [key: string]: string;
+}
+
 function Messenger(){
 
     enum Stage {Chat, List};
 
-    function initializeChat(msgs : Message[]){
+    async function initializeChat(msgs : Message[]){
         chats.setStage("list");
         let persons: Set<string> = new Set();
         for(let i = 0; i < msgs.length; i++){
@@ -37,14 +41,18 @@ function Messenger(){
         }
         let personsArr = Array.from(persons)
         let _chats: ChatElement[] = [];
+        let avatars = await messengerUtils.getAvatars(personsArr);
         personsArr.forEach((person)=>{
+            let avatar = avatars.get(person)
+            if(typeof avatar != "undefined"){
             let chat : ChatElement = {
                 person: {
                     username: person,
+                    avatar: avatar,
                 },
                 messages: messengerUtils.getMessagesForUser(person, msgs),
             }
-            _chats.push(chat);
+            _chats.push(chat);}
         })
         chats.setChats(_chats);
     }
@@ -81,14 +89,17 @@ function Messenger(){
         }   
     }
 
-    const updateChat = (msg: Message, person: string) => {
+    const updateChat = async (msg: Message, person: string) => {
         if(!chats.getUsers().includes(person)){
-            chats.addChat({
+            let avatars = await messengerUtils.getAvatars([person]);
+            let avatar = avatars.get(person)
+            if(typeof avatar != "undefined"){chats.addChat({
                 person: {
-                    username: person
+                    username: person,
+                    avatar: avatar,
                 },
                 messages: [msg]
-            })
+            })}
             return;
         }
         chats.setChats(chats.chats.map((chat)=>{

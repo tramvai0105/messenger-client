@@ -25,7 +25,9 @@
   }
 
 body{
-    background-image: linear-gradient(180deg, rgba(205, 224, 204, 0.2945) 0%, rgba(149, 190, 171, 0.475) 80.21%, rgba(125, 175, 157, 0.95) 100%), url("./img/marble.png");
+    background-image: 
+    linear-gradient(180deg, rgba(205, 224, 204, 0.2945) 0%, 
+    rgba(255, 227, 170, 0.475) 80.21%, rgba(255, 227, 170, 0.95) 100%), url("./img/marble.png");
     background-size: cover;
     background-repeat: no-repeat;
     margin: 0;
@@ -66,6 +68,14 @@ body{
 .chat-item{
 }
 
+.send-button{
+  display: block;
+  background-image: url("./img/send.svg");
+  background-size: 32px;
+  height: 32px;
+  width: 32px;
+}
+
 .chat-input{
     height: inherit;
     resize: none;
@@ -75,4 +85,8 @@ body{
 .friends{
     width: 800px; 
     height: 95vh;
+}
+
+.m-frst-child > :first-child{
+  margin-top: auto !important;
 }

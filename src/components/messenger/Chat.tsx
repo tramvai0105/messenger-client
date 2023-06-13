@@ -30,9 +30,9 @@ function Chat({chat, back}:Props){
             <div className="chat flex flex-col h-full">
                 <span className="chat-info flex flex-row items-center">
                     <button onClick={back} className="basis-1/3">Back</button>
-                    <h1 className="basis-1/3 flex justify-center">{chat.person.username}</h1>
+                    <h1 className="basis-1/3 flex justify-center font-bold">{chat.person.username}</h1>
                 </span>
-                <MessageList messages={chat.messages}/>         
+                <MessageList messages={chat.messages} person={chat.person}/>         
                 <div className="mt-auto">
                     <ChatControls submit={sendMessage}/>
                 </div>
