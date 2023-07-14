@@ -16,7 +16,7 @@ const User = require("./models/User");
 const Message = require("./models/Message");
 const wsutils = require("./utils/wsutils");
 const authMiddleware = require("./middleware/authMiddleware");
-const fileUpload = require("express-fileupload")
+const fileUpload = require("express-fileupload");
 
 app.use(cors());
 app.use(fileUpload({}))
@@ -70,6 +70,10 @@ app.ws("/", (ws, req) => {
         msg.userId = wsAuthMiddleware(msg)
         messageHandler(ws, msg);
         break;
+      case "delete":
+        msg.userId = wsAuthMiddleware(msg)
+        deleteHandler(ws, msg);
+        break;
     }
   });
 });
@@ -93,10 +97,20 @@ async function messageHandler(ws, msg){
     to: receiverId,
     text: msg.text,
   })
-  msg.time = Date.now();
+  let savedMsg = await message.save();
+  msg._id = savedMsg._id.toString();
+  msg.time = savedMsg.time;
   sendToUser(ws, msg, senderId);
   sendToUser(ws, msg, receiverId);
-  await message.save();
+}
+
+async function deleteHandler(ws, msg){
+  const from = ((await User.findOne({username:msg.from}))._id).toString();
+  const to = ((await User.findOne({username:msg.to}))._id).toString();
+  // msg._id = ((await Message.findOneAndDelete({from: from, to: to, time: msg.time}))._id).toString()
+  await Message.deleteOne({_id: msg._id})
+  sendToUser(ws, msg, from);
+  sendToUser(ws, msg, to);
 }
 
 const sendToUser = (ws, msg, userId) => {

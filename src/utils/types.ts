@@ -9,6 +9,7 @@ export type Person = {
 }
 
 export type Message = {
+    _id: string,
     time: number,
     text: string,
     from:string,
@@ -16,8 +17,10 @@ export type Message = {
 }
 
 export type MessageFromSocket = {
+    _id: string,
     time: number,
     text: string,
     username:string,
     to:string,
+    from: string,
 }

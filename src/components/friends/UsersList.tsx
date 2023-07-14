@@ -53,13 +53,13 @@ function UsersList(){
     }
 
     return(
-        <div className='h-full overflow-y-auto'>
+        <div className='h-full w-full flex flex-col overflow-y-auto'>
             {users?.map((user, i)=>
-            <div className='w-full flex justify-between items-center pl-5 pr-7 h-10' key={i}>
+            <div className='flex w-full justify-between items-center bg-white rounded-md pl-2 pr-2 h-10 mb-1' key={i}>
                 <Avatar r={32} avatar={user.avatar}/> {user.username}
                 {(socket.token) 
                 ? <button onClick={()=>requestFriend(user._id)} 
-                    className='p-1'>Add to friends</button>
+                    className='border-b-[2px] p-1 h-[30px] border-black'>Add to friends</button>
                 : <></>}
             </div>
             )}

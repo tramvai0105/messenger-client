@@ -53,13 +53,13 @@ function RequestsList(){
     }
 
     return(
-        <div className='h-full'>
+        <div className='h-full w-full flex flex-col'>
             {requests?.map((request, i)=>
-            <div className='w-full flex justify-between items-center pl-5 pr-7 h-10' key={i}>
+            <div className='w-full flex justify-between items-center bg-white rounded-md pl-2 pr-2 h-10 mb-1' key={i}>
                 <Avatar r={32} avatar={request.avatar}/> {request.username}
                 {(socket.token) 
                 ? <button onClick={()=>acceptFriend(request._id)} 
-                    className='p-1'>Add to friends</button>
+                    className='border-b-[2px] p-1 h-[30px] border-black'>Add to friends</button>
                 : <></>}
             </div>
             )}

@@ -1,10 +1,11 @@
 import { makeAutoObservable } from "mobx"
-import { ChatElement } from "../utils/types";
+import { ChatElement, MessageFromSocket } from "../utils/types";
 
 enum Stage {Chat, List};
 
 class Chats{
     chats : ChatElement[] = [];
+    queryMsg : number | null = null;
     stage : Stage = Stage.List;
     selectedChat : ChatElement | null = null; 
 
@@ -15,6 +16,10 @@ class Chats{
     setToDefault(){
         this.chats = [];
         this.stage = Stage.List;
+    }
+
+    setQueryMsg(index: number | null){
+        this.queryMsg = index;
     }
 
     getUsers(){
@@ -39,6 +44,18 @@ class Chats{
     addChat(chat: ChatElement){
         if(!this.getUsers().includes(chat.person.username))
         this.chats.push(chat)
+    }
+
+    deleteMessage(person: string, _id: string){
+        let chats = this.chats;
+        for(let i = 0; i < chats.length; i++){
+            console.log(chats[i].person.username, person);
+            if(chats[i].person.username == person){
+                console.log(chats[i].messages, _id);
+                chats[i].messages = chats[i].messages.filter(msg => msg._id != _id)
+            }
+        }
+        this.chats = chats;
     }
 
     constructor(){

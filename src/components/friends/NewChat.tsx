@@ -29,7 +29,7 @@ function NewChat({username}: Props){
     }
 
     return(
-        <button onClick={makeChat} className="border p-1 border-solid border-gray-700">
+        <button onClick={makeChat} className="bg-white h-[30px] border-b-[2px] p-1 border-black">
             Chat
         </button>
     )

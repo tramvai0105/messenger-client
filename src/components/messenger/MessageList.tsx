@@ -3,6 +3,7 @@ import { useRef, useEffect, MutableRefObject} from 'react';
 import Avatar from '../utils/Avatar';
 import socket from '../../store/socket';
 import {useState} from 'react';
+import chats from '../../store/chats';
 
 interface Props{
     messages: Message[],
@@ -11,19 +12,36 @@ interface Props{
 
 function MessageList({messages, person}:Props){
 
+    const listRef = useRef<HTMLDivElement>(null);
+    const [dial, setDial] = useState<number | null>(1);
+    const linkRef = useRef<HTMLDivElement | null>(null)
+
     useEffect(()=>{
+        if(listRef.current && linkRef.current == null)
+        {listRef.current.scrollTo({top: listRef.current.scrollHeight})}
+    }, [messages])
+
+    useEffect(()=>{
+        if(chats.queryMsg != null && linkRef.current){
+            console.log(1);
+            console.log(linkRef);
+            let offset = linkRef.current.offsetTop - 70;
+            listRef.current?.scrollTo({top: offset})
+            linkRef.current.classList.add("border-gray-500", "border-[2px]")
+            setTimeout(() => {
+                linkRef.current?.classList.remove("border-gray-500", "border-[2px]")
+                linkRef.current = null
+            }, 500);
+        }
         window.addEventListener("click", ()=>{
             setDial(null)
         })
+        return(
+            window.removeEventListener("click", ()=>{
+                setDial(null)
+            })
+        )
     }, [])
-
-    const listRef = useRef<HTMLDivElement>(null);
-    const [dial, setDial] = useState<number | null>(1);
-
-    useEffect(()=>{
-        if(listRef.current)
-        listRef.current.scrollTo({top: listRef.current.scrollHeight})
-    }, [messages])
 
     function formatTime(s:number) {
         return new Date(s + 10800000).toISOString().slice(-13, -8);
@@ -41,27 +59,41 @@ function MessageList({messages, person}:Props){
     }
 
     function deleteMsg(msg: Message){
+        console.log(msg);
+        if(socket.socket){
+            let token = socket.token;
+            socket.socket.send(JSON.stringify({
+                token,
+                method: "delete",
+                _id: msg._id,
+                from: msg.from,
+                to: msg.to,
+              }))
+        }
         setDial(null)
-
-        console.log("deleted");
     }
 
     return(
-        <div ref={listRef} className='message-list h-full flex flex-col overflow-y-auto overflow-x-hidden m-frst-child'>
+        <div ref={listRef} className='message-list ml-4 h-full flex flex-col overflow-y-auto overflow-x-hidden m-frst-child bg-[#D9D9D9]'>
+            <div className="pt-1"></div>
             {messages.map((message, index)=>
-            <div key={index} className='relative w-fit ml-2 flex flex-col rounded-b-md rounded-tr-md border border-solid border-[#7887AB] h-auto m-1 p-1'>
-                <span className='text-xs flex h-[22px]'>
-                    {(message.from != socket.username)?<Avatar r={22} avatar={person.avatar}/> : <Avatar r={22} avatar={socket.avatar}/>} 
-                    <span className='p-1'/> 
-                    <span className='font-bold pr-2'>{message.from}</span> 
-                    {formatTime(message.time)} 
-                    <span className='pl-1 text-lg leading-[6px] cursor-pointer' onClick={(e)=>makeDial(e, index)}>...</span>
-                    {(dial == index)
-                    ?<div onClick={(e)=>e.stopPropagation()} className='absolute w-fit h-fit p-2 bg-[#FFE3AA] rounded-sm left-[122px] top-[11px] flex justify-center'>
-                        <button onClick={()=>deleteMsg(message)} className='border h-6 border-black rounded-md p-1'>Delete</button>
+            <div key={index} ref={(chats.queryMsg != null && chats.queryMsg == index) ? linkRef : null} className='relative w-fit ml-2 flex flex-col rounded-b-md rounded-tr-md border border-solid bg-white h-auto m-1 p-1'>
+                <div className='flex justify-between'>
+                    <div className='text-xs flex h-[22px]'>
+                        {(message.from != socket.username)?<Avatar r={22} avatar={person.avatar}/> : <Avatar r={22} avatar={socket.avatar}/>} 
+                        <span className='p-1'/> 
+                        <span className='font-bold pr-8'>{message.from}</span>
                     </div>
-                    :<></>}
-                </span>
+                    <div className='text-xs flex h-[22px]'>
+                        {formatTime(message.time)} 
+                        <span className='pl-1 text-lg leading-[6px] cursor-pointer' onClick={(e)=>makeDial(e, index)}>...</span>
+                        {(dial == index)
+                        ?<div onClick={(e)=>e.stopPropagation()} className='absolute w-fit h-fit p-2 bg-[#3C6E71] rounded-sm right-[10px] top-[12px] translate-x-full flex justify-center'>
+                            {(message.from == socket.username) ? <button onClick={()=>deleteMsg(message)} className='border h-6 border-black rounded-md p-1 bg-gray-100'>Delete</button> : <></>}
+                        </div>
+                        :<></>}
+                    </div>
+                </div>
                 <div className='pl-3 pr-2 text-base whitespace-pre'>
                     {JSON.parse(message.text)}
                 </div>

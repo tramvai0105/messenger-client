@@ -81,12 +81,24 @@ function Messenger(){
                     console.log(msg);
                     saveMessage(msg);
                     break;
+                case "delete":
+                    deleteMessage(msg);
+                    break;
                 }
             }
             socket.socket.onclose = () => {
                 console.log("CLOSED");        
             }
         }   
+    }
+
+    const deleteMessage = (msg:MessageFromSocket)=>{
+        if(socket.username == msg.from){
+            chats.deleteMessage(msg.to, msg._id)
+        }
+        if(socket.username == msg.to){
+            chats.deleteMessage(msg.from, msg._id)
+        }
     }
 
     const updateChat = async (msg: Message, person: string) => {
@@ -114,6 +126,7 @@ function Messenger(){
 
     const saveMessage = (msg:MessageFromSocket)=>{
         const message: Message = {
+            _id: msg._id,
             time: msg.time,
             text: msg.text,
             from: msg.username,
@@ -127,9 +140,11 @@ function Messenger(){
         }
     }
 
-    function selectChat(index:number){
+    function selectChat(index:number, msgIndex: number | null = null){
         chats.setSelectedChat(index);
         chats.setStage("chat");
+        chats.setQueryMsg(msgIndex);
+        console.log(msgIndex);
     }
 
     // function parseMessages(msg:any){

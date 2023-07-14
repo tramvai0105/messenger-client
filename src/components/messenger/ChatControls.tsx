@@ -59,9 +59,9 @@ function ChatControls({submit}:Props){
     }
 
     return(
-        <div className="chat-controls bg-[#D4B16A] 
-         flex flex-row p-3 border-solid border rounded-b-xl h-fit">
-            <textarea ref={inputRef} style={{height:`40px`}}
+        <div className="chat-controls bg-[#3C6E71] 
+         flex flex-row items-end p-2 border-solid border rounded-b-xl h-fit">
+            <textarea placeholder='Write a message...' ref={inputRef} style={{height:`40px`}}
             value={msgInput} onChange={(e)=>controlInput(e)} 
             className='chat-input overflow-y-hidden p-2 rounded-md'/>
             <button className="h-[40px] w-[40px] flex justify-center items-center" onClick={()=>send(msgInput)}><span className="send-button"/></button>

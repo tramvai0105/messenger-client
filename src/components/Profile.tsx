@@ -4,11 +4,14 @@ import { observer } from "mobx-react-lite";
 import { useEffect } from 'react';
 import DialogueBox from "./utils/DialogueBox";
 import useFetch from '../hooks/useFetch';
+import { useNavigate } from "react-router-dom";
+import chats from "../store/chats";
 
 
 function Profile(){
 
     const inputRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
     
     const [dialogue, setDialogue] = useState<boolean>(false)
     const [previewImg, setPreviewImg] = useState<string>("")
@@ -32,7 +35,7 @@ function Profile(){
         body: formData
         })
         let {message} = await res.json()
-        alert(message);
+        setDialogue(false)
         getAvatar();
     }
 
@@ -76,32 +79,42 @@ function Profile(){
         }
       }
 
+    function logoff(){
+        socket.setToDefault();
+        chats.setToDefault();
+        const localStorage = window.localStorage;
+        localStorage.setItem("userData", "");
+        navigate('../auth', { replace: false });
+    }
+
     return(
         <React.Fragment>
             <div className="absolute h-[288px] w-[288px] 
             translate-x-[-80px]
             translate-y-[-80px] 
-            border-[#734C8F] border-solid border-[20px] rounded-full"></div>
+            border-white border-solid border-[16px] rounded-full"></div>
             <div className="absolute h-[248px] w-[248px] 
             translate-x-[-60px]
             translate-y-[-60px] 
-            border-[#D4D26A] border-solid border-[20px] rounded-full"></div>
+            border-white border-solid border-[16px] rounded-full"></div>
             <div className="absolute h-[208px] w-[208px] 
             translate-x-[-40px]
             translate-y-[-40px] 
-            border-[#734C8F] border-solid border-[20px] rounded-full"></div>
+            border-white border-solid border-[16px] rounded-full"></div>
             <div className="absolute h-[168px] w-[168px] 
             translate-x-[-20px]
             translate-y-[-20px] 
-            border-[#D4D26A] border-solid border-[20px] rounded-full"></div>
-            <div className="w-full h-32 mb-6 bg-[#3A1356] 
-            rounded-tl-[128px] rounded-bl-[128px] z-10 flex flex-row items-center">
-                <div className="h-32 w-32 rounded-full bg-green-400">
+            border-white border-solid border-[16px] rounded-full"></div>
+            <div className="w-full pr-4 h-32 mb-6 bg-[#353535] rounded-r-[16px] 
+            rounded-tl-[128px] rounded-bl-[128px] z-10 flex flex-row items-center relative">
+                <div className="h-32 w-32 rounded-full bg-gray-400">
                     <img onClick={()=>setDialogue(true)} className=" 
                     hover:cursor-pointer object-cover w-full h-full rounded-full" 
-                    src={socket.avatar} alt="avatar"/>
+                    src={socket.avatar} alt=""/>
                 </div>
                 <h1 className="text-white ml-2 mr-4 text-xl text-center">{socket.username}</h1>
+                <button className="absolute z-10 left-full -translate-x-7 -translate-y-7 top-full flex justify-center" onClick={()=>logoff()}><span className="exit-button"/></button>
+                <div className="absolute rounded-r-[8px] border-r-[1px] border-t-[1px] border-b-[1px]  border-white h-full w-[16px] left-full -translate-x-[16px]"/>
             </div>
             <DialogueBox set={setDialogue} display={dialogue}>
                 <h1 className="mb-4">Превью: (обрезайте сами)</h1>

@@ -9,6 +9,7 @@ class Socket{
     token : Token | null = null;
     username : string | null = null;
     avatar : string | undefined = undefined;
+    error : string = "";
 
     makeSocket(){
         if(this.socket === null || this.socket.readyState === WebSocket.CLOSED){
@@ -31,6 +32,10 @@ class Socket{
         if(this.socket && (this.socket.OPEN || this.socket.CONNECTING)){
             this.socket.close()  
         }
+    }
+
+    setError(error: string){
+        this.error = error;
     }
 
     setTocken(tocken: Token){

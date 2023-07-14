@@ -9,7 +9,7 @@ function Avatar({avatar, r}: Props){
 
     return(
         <React.Fragment>
-            <div className='rounded-full bg-green-400' style={{"height": `${r}px`, "width": `${r}px`}}>
+            <div className='rounded-full bg-gray-400' style={{"height": `${r}px`, "width": `${r}px`}}>
                     <img className="
                     object-cover w-full h-full rounded-full" 
                     src={avatar} alt="avatar"/>
