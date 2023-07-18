@@ -46,6 +46,7 @@ function Messenger(){
             let avatar = avatars.get(person)
             if(typeof avatar != "undefined"){
             let chat : ChatElement = {
+                _id: chats.getIndex(),
                 person: {
                     username: person,
                     avatar: avatar,
@@ -106,6 +107,7 @@ function Messenger(){
             let avatars = await messengerUtils.getAvatars([person]);
             let avatar = avatars.get(person)
             if(typeof avatar != "undefined"){chats.addChat({
+                _id: chats.getIndex(),
                 person: {
                     username: person,
                     avatar: avatar,
@@ -128,9 +130,10 @@ function Messenger(){
         const message: Message = {
             _id: msg._id,
             time: msg.time,
-            text: msg.text,
+            body: msg.body,
             from: msg.username,
             to: msg.to,
+            type: msg.type,
         }
         if(socket.username != msg.username){
             updateChat(message, msg.username)

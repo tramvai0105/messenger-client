@@ -8,9 +8,22 @@ class Chats{
     queryMsg : number | null = null;
     stage : Stage = Stage.List;
     selectedChat : ChatElement | null = null; 
+    indexCounter : number = 0;
 
     setChats(chats: ChatElement[]){
         this.chats = chats
+    }
+
+    getIndex(){
+        return this.indexCounter++
+    }
+
+    setChatInput(id: number, input: string){
+        this.chats.forEach((chat)=>{
+            if(chat._id == id){
+                chat.inputData = input;
+            }
+        })
     }
 
     setToDefault(){

@@ -5,6 +5,7 @@ const aWss = WSServer.getWss();
 const PORT = process.env.PORT || 5000;
 const cors = require("cors");
 const fs = require("fs");
+const base64Img = require('node-base64-img');
 const path = require("path");
 const db = require('mongoose');
 const authRouter = require("./comps/authRouter");
@@ -92,16 +93,41 @@ async function connectionHandler(ws, msg){
 async function messageHandler(ws, msg){
   const senderId = msg.userId;
   const receiverId = ((await User.findOne({username:msg.to}))._id).toString();
-  const message = new Message({
-    from: senderId,
-    to: receiverId,
-    text: msg.text,
-  })
-  let savedMsg = await message.save();
-  msg._id = savedMsg._id.toString();
-  msg.time = savedMsg.time;
-  sendToUser(ws, msg, senderId);
-  sendToUser(ws, msg, receiverId);
+
+  if(msg.type == "img"){
+    let name = Date.now().toString()
+    try{const response = await base64Img(msg.body, path.join(__dirname, "images"), name, {type: 'png'})}
+    catch(e){
+      return;
+      ;}
+    const message = new Message({
+      from: senderId,
+      to: receiverId,
+      body: JSON.stringify("http://localhost:5000/" + "images/" + `${name}.png`),
+      type: "img"
+    })
+    let savedMsg = await message.save();
+    msg._id = savedMsg._id.toString();
+    msg.time = savedMsg.time;
+    msg.body = savedMsg.body;
+    sendMsg(msg)
+  } else{
+    const message = new Message({
+      from: senderId,
+      to: receiverId,
+      body: msg.body,
+      type: "text"
+    })
+    let savedMsg = await message.save();
+    msg._id = savedMsg._id.toString();
+    msg.time = savedMsg.time;
+    sendMsg(msg)
+  }
+
+  async function sendMsg(msg){
+    sendToUser(ws, msg, senderId);
+    sendToUser(ws, msg, receiverId);
+  } 
 }
 
 async function deleteHandler(ws, msg){

@@ -1,6 +1,4 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import React from "react";
-import socket from '../store/socket';
 import { observer } from "mobx-react-lite";
 import Header from "./Header";
 import NavButtons from "./NavButtons";

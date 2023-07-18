@@ -16,6 +16,7 @@ function NewChat({username}: Props){
         let avatar = avatars.get(username)
         if(typeof avatar != "undefined"){
         const chat : ChatElement = {
+            _id: chats.getIndex(),
             person :{
                 username: username,
                 avatar: avatar,

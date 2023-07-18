@@ -1,16 +1,46 @@
 import { Message, Person } from '../../utils/types';
-import { useRef, useEffect, MutableRefObject} from 'react';
+import { useRef, useEffect, memo} from 'react';
 import Avatar from '../utils/Avatar';
 import socket from '../../store/socket';
 import {useState} from 'react';
 import chats from '../../store/chats';
+import DialogueBox from '../utils/DialogueBox';
 
 interface Props{
     messages: Message[],
     person: Person,
 }
 
-function MessageList({messages, person}:Props){
+interface MessageBodyProps{
+    message: Message,
+}
+
+const MessageBody = memo(({message}: MessageBodyProps) => {
+
+    const [dialogue, setDialogue] = useState<boolean>(false)
+
+    switch (message.type) {
+        case "text":
+            return(<div className='pl-3 pr-2 text-base whitespace-pre'>
+                {JSON.parse(message.body)}
+            </div>)
+            break;
+        case "img":
+            return(<div className='pl-3 flex flex-col pr-2 text-base whitespace-pre'>
+            <span className='pt-1'></span>
+                <DialogueBox display={dialogue} set={setDialogue}>
+                    <img className='w w-auto max-h-[500px]' src={JSON.parse(message.body)}/>
+                </DialogueBox>
+                <img onClick={()=>setDialogue(true)} className='w max-w-[270px] h-auto cursor-pointer' src={JSON.parse(message.body)}/>
+            </div>)
+            break;
+        default:
+            return(<></>)
+            break;
+    }
+})
+
+const MessageList = memo(({messages, person}:Props) => {
 
     const listRef = useRef<HTMLDivElement>(null);
     const [dial, setDial] = useState<number | null>(1);
@@ -18,7 +48,9 @@ function MessageList({messages, person}:Props){
 
     useEffect(()=>{
         if(listRef.current && linkRef.current == null)
-        {listRef.current.scrollTo({top: listRef.current.scrollHeight})}
+        {
+            listRef.current.scrollTo({top: listRef.current.scrollHeight})
+        }
     }, [messages])
 
     useEffect(()=>{
@@ -94,14 +126,12 @@ function MessageList({messages, person}:Props){
                         :<></>}
                     </div>
                 </div>
-                <div className='pl-3 pr-2 text-base whitespace-pre'>
-                    {JSON.parse(message.text)}
-                </div>
+                <MessageBody message={message}/>
             </div>
             )}
             <span className='pb-2'/>
         </div>
     )
-}
+})
 
 export default MessageList;

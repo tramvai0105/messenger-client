@@ -94,6 +94,15 @@ body{
   width: 32px;
 }
 
+.loadimg-button{
+  display: block;
+  background-image: url("./img/stamp.svg");
+  background-size: 24px;
+  height: 24px;
+  width: 24px;
+  filter: invert(67%) sepia(9%) saturate(351%) hue-rotate(179deg) brightness(97%) contrast(85%);
+}
+
 .exit-button{
   display: block;
   background-image: url("./img/exit.svg");

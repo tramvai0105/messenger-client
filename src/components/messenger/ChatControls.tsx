@@ -1,16 +1,63 @@
-import {ChangeEvent, useRef, useState} from 'react';
+import { ChangeEvent, useRef, useState, useEffect } from 'react';
+import chats from '../../store/chats';
+import useDebounce from '../../hooks/useDebounce';
 
 interface Props{
-    submit: (msg:string)=>void,
+    id: number,
+    input?: string,
+    chatRef: React.RefObject<HTMLDivElement>,
+    submit: (msg:string, type?: string)=>void,
 }
 
-function ChatControls({submit}:Props){
+function ChatControls({submit, chatRef, id, input}:Props){
 
-    const [msgInput, setMsgInput] = useState<string>("");
+    const [debouncedMsgInput, msgInput, setMsgInput] = useDebounce<string>("", 700);
     const inputRef = useRef<HTMLTextAreaElement>(null)
+    const counter = useRef<number>(0)
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [previewImg, setPreviewImg] = useState<string>("")
+
+    useEffect(()=>{
+        if(chatRef.current){
+            chatRef.current.addEventListener("dragenter", (e) => {
+                counter.current += 1;
+                showDrop()})
+            chatRef.current.addEventListener("dragleave", (e)=> {
+                counter.current -= 1;
+                if(counter.current == 0){hideDrop()}
+            })
+            if(input){
+                setMsgInput(input)
+            }
+        }
+    },[])
+
+    useEffect(() => {
+      if(!previewImg){
+        chats.setChatInput(id, debouncedMsgInput);
+      }
+    }, [debouncedMsgInput])
+    
+
+    function showDrop(){
+        if(inputRef.current){
+            inputRef.current.style.height = "182px"
+            inputRef.current.placeholder = "Drop file here!"
+            inputRef.current.classList.add("bg-[#303030]")
+        }
+    }
+
+    function hideDrop(){
+        if(inputRef.current){
+            inputRef.current.style.height = "40px"
+            inputRef.current.placeholder = "Write a message..."
+            inputRef.current.classList.remove("bg-[#303030]")
+        }
+    }
 
     function controlInput(e:ChangeEvent<HTMLTextAreaElement>){     
-        if(inputRef.current){
+        if(inputRef.current && !previewImg){
             inputRef.current.style.height = "0px";
             let height = inputRef.current.scrollHeight;
             if(height < 200){
@@ -19,10 +66,89 @@ function ChatControls({submit}:Props){
                 inputRef.current.style.height = "200px";
             }
         }
-        setMsgInput(e.target.value)
+        if(!previewImg){
+            setMsgInput(e.target.value)
+        }
     }
 
-    function send(msg:string){
+    function removeFile(){
+        if(fileInputRef.current && inputRef.current){
+            fileInputRef.current.files = null;
+            setPreviewImg("")
+            inputRef.current.style.height = "40px";
+            inputRef.current.placeholder = "Write a message..."
+            inputRef.current.classList.remove("bg-[#303030]")
+        }
+    }
+
+    function dropHandler(e: React.DragEvent){
+        e.preventDefault()
+        if(e.dataTransfer.files && fileInputRef.current){
+            if(fileInputRef.current.files && inputRef.current){
+                inputRef.current.style.height = "40px"
+                inputRef.current.placeholder = "Write a message..."
+                inputRef.current.classList.remove("bg-[#303030]")
+                fileInputRef.current.files = e.dataTransfer.files;
+                previewFile()
+            }
+        }
+    }
+
+    function previewFile(){
+        if(!fileInputRef.current?.files){
+            return;
+        }
+        var file    = fileInputRef.current?.files[0];
+        var reader  = new FileReader();
+      
+        reader.onloadend = function () {
+            if(typeof(reader.result) === "string"){
+                setPreviewImg(reader.result);
+            }
+        }
+      
+        if (file) {
+          reader.readAsDataURL(file);
+        }
+        if(inputRef.current){
+            setMsgInput("")
+            inputRef.current.style.height = "182px"
+            inputRef.current.placeholder = "File is ready to send"
+            inputRef.current.classList.add("bg-[#303030]")
+        }
+      }
+
+    async function sendFile(){
+        if(!fileInputRef.current?.files){
+            return;
+        }
+        const file = fileInputRef.current?.files[0];
+        if(!['image/jpeg','image/png','image/svg+xml'].includes(file.type)){
+            removeFile()
+            return;
+        }
+        var reader = new FileReader();
+        
+        reader.onload = function () {
+            if(typeof(reader.result) === "string"){
+                submit(reader.result, "img")
+            }
+        }
+        reader.readAsDataURL(file);
+
+        removeFile()
+    }
+
+    function send(){
+        if(!previewImg){
+            sendText()
+        } else {
+            sendFile()
+        }
+    }
+
+    function sendText(){
+        let msg = msgInput;
         if(msg == "" || msg == " "){
             return;
         }
@@ -50,21 +176,34 @@ function ChatControls({submit}:Props){
         msg = JSON.stringify(text)
         setMsgInput("");
         console.log(msg);
-        if(msg !== ""){
-            submit(msg);
-        }
+        submit(msg);
         if(inputRef.current){
             inputRef.current.style.height = "40px";
         }
     }
 
     return(
-        <div className="chat-controls bg-[#3C6E71] 
-         flex flex-row items-end p-2 border-solid border rounded-b-xl h-fit">
+        <div className="relative chat-controls bg-[#3C6E71] 
+         flex flex-row items-end p-1 border-solid border rounded-b-xl h-fit">
+            <input className="hidden"
+                ref={fileInputRef}
+                onChange={previewFile}
+                id="img-input" 
+                type="file"/> 
+            <label className='text-xl h-[40px] w-[30px] flex justify-center items-center mr-1' htmlFor="img-input" onDrop={(e)=>dropHandler(e)}><span className='loadimg-button'/></label>
             <textarea placeholder='Write a message...' ref={inputRef} style={{height:`40px`}}
             value={msgInput} onChange={(e)=>controlInput(e)} 
-            className='chat-input overflow-y-hidden p-2 rounded-md'/>
-            <button className="h-[40px] w-[40px] flex justify-center items-center" onClick={()=>send(msgInput)}><span className="send-button"/></button>
+            className='chat-input overflow-y-hidden p-2 rounded-md'
+            onDrop={(e)=>dropHandler(e)}
+            />
+            {(previewImg)?
+            <>
+            <img className="absolute border-[2px] object-cover h-[179px] w-[170px] translate-x-[34px] translate-y-[39px] rounded-md mb-10"     
+                src={previewImg}/>
+            <button onClick={()=>removeFile()} className='absolute left-[212px] bottom-[160px] text-gray-400'>X</button>
+            </>       
+            :<></>}
+            <button className="h-[40px] w-[40px] flex justify-center items-center" onClick={()=>send()}><span className="send-button"/></button>
         </div>        
     )
 }

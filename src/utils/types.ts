@@ -1,6 +1,8 @@
 export type ChatElement = {
+    _id: number,
     person: Person,
     messages: Message[],
+    inputData?: string,
 }
 
 export type Person = {
@@ -11,16 +13,18 @@ export type Person = {
 export type Message = {
     _id: string,
     time: number,
-    text: string,
+    body: string,
     from:string,
     to:string,
+    type: string,
 }
 
 export type MessageFromSocket = {
     _id: string,
     time: number,
-    text: string,
+    body: string,
     username:string,
     to:string,
     from: string,
+    type: string,
 }

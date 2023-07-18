@@ -18,6 +18,8 @@
     "express-ws": "^5.0.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.3",
+    "node-base64-img": "^2.0.0",
+    "node-fetch": "^3.3.1",
     "uniqid": "^5.4.0"
   }
 }

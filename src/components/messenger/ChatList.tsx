@@ -32,9 +32,11 @@ interface Filtered{
 function ChatInList({chat, index, select, last}:ChatInListProps){
 
     function lastMessage(msgs: Message[]){
+        if(msgs.length < 1){return ["", ""]}
         var msg = msgs[msgs.length - 1];
+        if(msg.type == "img"){return [msg.from, "Photo"]}
         if (msg != undefined) {
-            return [msg.from ,(JSON.parse(msg.text)).slice(0, 40) + "..."];
+            return [msg.from ,(JSON.parse(msg.body)).slice(0, 40) + "..."];
          } else {
             return "";
          }
@@ -55,7 +57,7 @@ function ChatInList({chat, index, select, last}:ChatInListProps){
                 <span className="p-2"/> 
                 <span className="px-2 rounded-md bg-white">{chat.person.username}</span>
                 <span className="pl-2 w-[2px] h-full border-r-[2px] border-black"/>
-                <span className="ml-2 px-2 rounded-md bg-white">{last.from} : {foundedMessage(last.message)}</span>
+                {(chat.messages.length > 1)?<span className="ml-2 px-2 rounded-md bg-white">{last.from} : {foundedMessage(last.message)}</span>:<></>}
             </div>
             :
             <div onClick={()=>{select(index, null)}} key={index} className="flex p-4 h-14 select-none items-center hover:bg-gray-200 cursor-pointer">  
@@ -63,7 +65,7 @@ function ChatInList({chat, index, select, last}:ChatInListProps){
                 <span className="p-2"/> 
                 <span className="px-2 rounded-md bg-white">{chat.person.username}</span>
                 <span className="pl-2 w-[2px] h-full border-r-[2px] border-black"/>
-                <span className="ml-2 px-2 rounded-md bg-white">{lastMessage(chat.messages)[0]} : {lastMessage(chat.messages)[1]}</span>
+                {(chat.messages.length > 1)?<span className="ml-2 px-2 rounded-md bg-white">{lastMessage(chat.messages)[0]} : {lastMessage(chat.messages)[1]}</span>:<></>}
             </div>
         }
         </>
@@ -93,8 +95,8 @@ function ChatList({chats, select}:Props){
                     data.person.push({index: i, chat: chats[i]})
                 }
                 for(let j = 0; j < chats[i].messages.length; j++){
-                    if(chats[i].messages[j].text.toLowerCase().indexOf(filter) >= 0){
-                        data.messages.push({index: i, chat: chats[i], last:{message: chats[i].messages[j].text, messageIndex: j, from:chats[i].messages[j].from}})
+                    if(chats[i].messages[j].type != "img" && chats[i].messages[j].body.toLowerCase().indexOf(filter) >= 0){
+                        data.messages.push({index: i, chat: chats[i], last:{message: chats[i].messages[j].body, messageIndex: j, from:chats[i].messages[j].from}})
                     }
                 }
             }
