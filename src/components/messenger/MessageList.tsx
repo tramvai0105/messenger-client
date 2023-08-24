@@ -13,9 +13,10 @@ interface Props{
 
 interface MessageBodyProps{
     message: Message,
+    scroll: ()=>void,
 }
 
-const MessageBody = memo(({message}: MessageBodyProps) => {
+const MessageBody = memo(({message, scroll}: MessageBodyProps) => {
 
     const [dialogue, setDialogue] = useState<boolean>(false)
 
@@ -31,7 +32,7 @@ const MessageBody = memo(({message}: MessageBodyProps) => {
                 <DialogueBox display={dialogue} set={setDialogue}>
                     <img className='w w-auto max-h-[500px]' src={JSON.parse(message.body)}/>
                 </DialogueBox>
-                <img onClick={()=>setDialogue(true)} className='w max-w-[270px] h-auto cursor-pointer' src={JSON.parse(message.body)}/>
+                <img alt='failed' onLoad={()=>scroll()} onClick={()=>setDialogue(true)} className='w max-w-[270px] h-auto cursor-pointer' src={JSON.parse(message.body)}/>
             </div>)
             break;
         default:
@@ -47,11 +48,15 @@ const MessageList = memo(({messages, person}:Props) => {
     const linkRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(()=>{
+        scroll()
+    }, [messages])
+
+    function scroll(){
         if(listRef.current && linkRef.current == null)
         {
             listRef.current.scrollTo({top: listRef.current.scrollHeight})
         }
-    }, [messages])
+    }
 
     useEffect(()=>{
         if(chats.queryMsg != null && linkRef.current){
@@ -106,7 +111,10 @@ const MessageList = memo(({messages, person}:Props) => {
     }
 
     return(
-        <div ref={listRef} className='message-list ml-4 h-full flex flex-col overflow-y-auto overflow-x-hidden m-frst-child bg-[#D9D9D9]'>
+        <div ref={listRef} className='message-list ml-4 h-full flex flex-col 
+        overflow-y-auto overflow-x-hidden
+        scrollbar-thin scrollbar-thumb-[#353535]
+        m-frst-child bg-[#D9D9D9]'>
             <div className="pt-1"></div>
             {messages.map((message, index)=>
             <div key={index} ref={(chats.queryMsg != null && chats.queryMsg == index) ? linkRef : null} className='relative w-fit ml-2 flex flex-col rounded-b-md rounded-tr-md border border-solid bg-white h-auto m-1 p-1'>
@@ -126,7 +134,7 @@ const MessageList = memo(({messages, person}:Props) => {
                         :<></>}
                     </div>
                 </div>
-                <MessageBody message={message}/>
+                <MessageBody scroll={scroll} message={message}/>
             </div>
             )}
             <span className='pb-2'/>

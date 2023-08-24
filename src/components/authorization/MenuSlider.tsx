@@ -3,7 +3,7 @@ import socket from "../../store/socket";
 import Registration from "./Registration";
 import Login from "./Login";
 import React from "react";
-
+import { observer } from "mobx-react-lite";
 
 enum Stage{
     Login,
@@ -12,7 +12,6 @@ enum Stage{
 
 
 function MenuSlider(){
-
 
     const [stage, setStage] = useState<Stage>(Stage.Login);
     
@@ -73,8 +72,10 @@ function MenuSlider(){
                     <Registration/>
             </div>
         </div>
-    </React.Fragment>        
+    </React.Fragment>      
     )
 }
 
-export default MenuSlider;
+const MenuSliderObserver = observer(MenuSlider);
+
+export default MenuSliderObserver;

@@ -32,7 +32,7 @@ function Login(){
     }
 
     async function login(){
-      let res = await fetch("http://localhost:5000/auth/login", {
+      let res = await fetch(`http://${process.env.REACT_APP_SERVER_IP}/auth/login`, {
         method:"POST",
         headers: {
           'Content-Type': 'application/json;charset=utf-8'
@@ -44,6 +44,7 @@ function Login(){
         socket.setError(message)
         return false
       }
+      socket.setFlag(true)
       socket.setAvatar(avatar);
       socket.setTocken(token);
       socket.username = loginData.username;
@@ -66,8 +67,8 @@ function Login(){
           {(!socket.token)
           ?
           <div className="h-full flex flex-col items-center">
-            <input placeholder="Login" value={loginData.username} onChange={(e)=>setLoginData({...loginData, username:e.target.value})} className="border text-white text-center rounded-md border-solid border-white bg-[#353535] mb-1" type="text"/>
-            <input placeholder="Password" value={loginData.password} onChange={(e)=>setLoginData({...loginData, password:e.target.value})} className="border text-white text-center rounded-md border-solid border-white bg-[#353535]" type="password"/>
+            <input placeholder="Login" onKeyDown={(e)=>{if(e.key == "Enter"){login()}}} value={loginData.username} onChange={(e)=>setLoginData({...loginData, username:e.target.value})} autoFocus={true} className="border text-white text-center rounded-md border-solid border-white bg-[#353535] mb-1" type="text"/>
+            <input placeholder="Password" onKeyDown={(e)=>{if(e.key == "Enter"){login()}}} onChange={(e)=>setLoginData({...loginData, password:e.target.value})} className="border text-white text-center rounded-md border-solid border-white bg-[#353535]" type="password"/>
             <button onClick={login} className="bg-[#3C6E71] w-fit pl-10 pr-10 rounded-md mt-auto mb-6 text-[#D9D9D9]">Login</button>
           </div>
           :<div className="w-fit flex flex-col items-center h-full">

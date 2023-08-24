@@ -31,11 +31,11 @@ function Friends(){
             </div>
             <div className="w-2/12 h-full flex flex-col border-l-[2px] border-black pl-1 pt-2">
                 <button onClick={()=>setMenu(FriendsMenu.Friends)} 
-                className="p-3 w-full h-fit bg-[#3C6E71] rounded-l-md mb-1 text-white border-r-white">Friends</button>
+                className="p-3 w-full h-fit bg-[#3C6E71] hover:bg-[#508b8f] rounded-l-md mb-1 text-white">Friends</button>
                 <button onClick={()=>setMenu(FriendsMenu.Users)} 
-                className="p-3 w-full h-fit bg-[#3C6E71] rounded-l-md mb-1 text-white">All users</button>
+                className="p-3 w-full h-fit bg-[#3C6E71] hover:bg-[#508b8f] rounded-l-md mb-1 text-white">All users</button>
                 <button onClick={()=>setMenu(FriendsMenu.Requests)} 
-                className="p-3 w-full h-fit bg-[#3C6E71] rounded-l-md mb-1 text-white">Requests</button>
+                className="p-3 w-full h-fit bg-[#3C6E71] hover:bg-[#508b8f] rounded-l-md mb-1 text-white">Requests</button>
             </div>
         </div>
     )

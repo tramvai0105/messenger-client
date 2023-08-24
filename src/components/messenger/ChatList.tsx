@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { ChatElement, Message } from '../../utils/types';
 import Avatar from "../utils/Avatar";
-import {useRef, useState} from 'react';
-import chats from '../../store/chats';
+import {memo, useEffect, useRef, useState} from 'react';
+import chats from "../../store/chats";
 
 interface Props{
     chats : ChatElement[],
@@ -29,7 +29,7 @@ interface Filtered{
     }[]
 }
 
-function ChatInList({chat, index, select, last}:ChatInListProps){
+const ChatInList = ({chat, index, select, last}:ChatInListProps) => {
 
     function lastMessage(msgs: Message[]){
         if(msgs.length < 1){return ["", ""]}
@@ -65,7 +65,7 @@ function ChatInList({chat, index, select, last}:ChatInListProps){
                 <span className="p-2"/> 
                 <span className="px-2 rounded-md bg-white">{chat.person.username}</span>
                 <span className="pl-2 w-[2px] h-full border-r-[2px] border-black"/>
-                {(chat.messages.length > 1)?<span className="ml-2 px-2 rounded-md bg-white">{lastMessage(chat.messages)[0]} : {lastMessage(chat.messages)[1]}</span>:<></>}
+                {(chat.messages.length > 0)?<span className="ml-2 px-2 rounded-md bg-white">{lastMessage(chat.messages)[0]} : {lastMessage(chat.messages)[1]}</span>:<></>}
             </div>
         }
         </>

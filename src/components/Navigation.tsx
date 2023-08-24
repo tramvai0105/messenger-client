@@ -17,7 +17,7 @@ function Navigation(){
     return(
         <div className="flex flex-col w-full items-center h-full">
             <Header/>
-            <div className="content mt-16 -ml-52 h100-header relative">
+            <div className="content mt-14 -ml-52 h100-header relative">
                 <div className="flex flex-row h100-header">
                     <div className="flex h-fit ml-28 flex-col">
                         <Profile/>

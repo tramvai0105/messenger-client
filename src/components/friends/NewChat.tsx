@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import chats from "../../store/chats";
 import { ChatElement } from '../../utils/types';
 import messengerUtils from "../messenger/messenge.utils";
+import FActButton from "./FriendsActionButton";
 
 interface Props{
     username: string,
@@ -10,6 +11,18 @@ interface Props{
 function NewChat({username}: Props){
 
     const navigate = useNavigate()
+
+    async function setChat(){
+        for(let i = 0; i < chats.chats.length; i++){
+            if(chats.chats[i].person.username == username){
+                chats.setSelectedChat(chats.chats[i]._id)
+                chats.setStage("chat");
+                navigate("/app/messenger", { replace: false })
+                return
+            }
+        }
+        makeChat()
+    }
 
     async function makeChat(){
         let avatars = await messengerUtils.getAvatars([username]);
@@ -30,9 +43,7 @@ function NewChat({username}: Props){
     }
 
     return(
-        <button onClick={makeChat} className="bg-white h-[30px] border-b-[2px] p-1 border-black">
-            Chat
-        </button>
+        <FActButton onClick={setChat}>Chat</FActButton>
     )
 }
 

@@ -56,6 +56,7 @@ function Messenger(){
             _chats.push(chat);}
         })
         chats.setChats(_chats);
+        chats.sortByTime();
     }
 
     function backToList(){
@@ -66,29 +67,25 @@ function Messenger(){
         if(socket.token){
             handleConnection()
         }
-    }, [socket.token])
+    }, [socket.token, socket.socket])
 
     function handleConnection(){
         socket.makeSocket()
         if(socket.socket){
             socket.socket.onmessage = (event) => {
             let msg = JSON.parse(event.data);
+            console.log(msg);
             switch(msg.method){
                 case "connection":
-                    console.log("Connected", msg);
                     initializeChat(msg.msgsData);
                     break;
                 case "message":
-                    console.log(msg);
                     saveMessage(msg);
                     break;
                 case "delete":
                     deleteMessage(msg);
                     break;
                 }
-            }
-            socket.socket.onclose = () => {
-                console.log("CLOSED");        
             }
         }   
     }
@@ -124,6 +121,7 @@ function Messenger(){
                 return chat
             }
         }))
+        chats.sortByTime();
     }
 
     const saveMessage = (msg:MessageFromSocket)=>{

@@ -17,7 +17,7 @@ function Profile(){
     const [previewImg, setPreviewImg] = useState<string>("")
     
     const {data, refetch} = useFetch<{avatar: string}>(
-        "http://localhost:5000/file/getavatar", {token: socket.token?.token});
+        `http://${process.env.REACT_APP_SERVER_IP}/file/getavatar`, {token: socket.token?.token});
 
     async function uploadFile(){
         if(!inputRef.current?.files){
@@ -27,7 +27,7 @@ function Profile(){
         var formData = new FormData();
         formData.append("avatar", avatar);
          
-        let res = await fetch("http://localhost:5000/file/changeavatar", {
+        let res = await fetch(`http://${process.env.REACT_APP_SERVER_IP}/file/changeavatar`, {
         method:"POST",
         headers: {
             'Authorization': `Bearer ${socket.token}`,
@@ -52,7 +52,7 @@ function Profile(){
     }, [socket.token])
 
     async function getAvatar(){
-        const res = await fetch("http://localhost:5000/file/getavatar", {
+        const res = await fetch(`http://${process.env.REACT_APP_SERVER_IP}/file/getavatar`, {
             headers: {
                 'Authorization': `Bearer ${socket.token}`,
               }
@@ -122,11 +122,14 @@ function Profile(){
                     <img className="object-cover h-full w-full rounded-full mb-10" 
                         src={previewImg} alt="avatar"/>
                 </div>
-                <input className="mb-4 mt-4"
+                <input className="hidden"
                 name="avatar" 
-                type="file" ref={inputRef} onChange={previewFile}/> 
-                <button onClick={uploadFile} className="border-solid border-2 border-black p-1 rounded-md">
-                    Загрузить
+                type="file" ref={inputRef} onChange={previewFile}
+                id="img-profile"
+                /> 
+                <label className="mb-4 mt-4 p-1 border-black border-2 rounded-md cursor-pointer hover:bg-gray-100 " htmlFor="img-profile">Add picture...</label>
+                <button onClick={uploadFile} className="border-solid border-2 border-black p-1 rounded-md hover:bg-gray-100 ">
+                    Upload
                 </button>    
             </DialogueBox>
         </React.Fragment>

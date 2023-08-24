@@ -115,6 +115,7 @@ function ChatControls({submit, chatRef, id, input}:Props){
             inputRef.current.style.height = "182px"
             inputRef.current.placeholder = "File is ready to send"
             inputRef.current.classList.add("bg-[#303030]")
+            counter.current = 0;
         }
       }
 

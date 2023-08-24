@@ -1,6 +1,6 @@
 import { ChatElement } from "../../utils/types";
 import MessageList from "./MessageList";
-import {ChangeEvent, useRef, useState} from 'react';
+import { ChangeEvent, useRef, useState, useEffect } from 'react';
 import ChatControls from './ChatControls';
 import socket from "../../store/socket";
 import { observer } from "mobx-react-lite"
@@ -12,7 +12,6 @@ interface Props{
 
 function Chat({chat, back}:Props){
 
-    console.log("Chat rerender");
     const chatRef = useRef<HTMLDivElement>(null)
     
     function sendMessage(msg:string, type: string = "text"){

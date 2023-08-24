@@ -19,7 +19,7 @@ function App() {
     const userData = window.localStorage.getItem("userData")
       if(userData){
         let {username, token} = JSON.parse(userData)
-          let res = await fetch("http://localhost:5000/auth/check",{
+          let res = await fetch(`http://${process.env.REACT_APP_SERVER_IP}/auth/check`,{
                   method:"POST",
                   headers: {
                     'Content-Type': 'application/json;charset=utf-8',
@@ -29,6 +29,7 @@ function App() {
           if(res.status == 200){
             socket.setTocken(token);
             socket.username = username;
+            socket.setFlag(true);
           }else{
             const localStorage = window.localStorage;
             localStorage.setItem("userData", "");

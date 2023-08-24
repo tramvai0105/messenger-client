@@ -26,6 +26,15 @@ class Chats{
         })
     }
 
+    sortByTime(){
+        let _chats = this.chats;
+        _chats.sort((a, b)=> b.messages[b.messages.length - 1].time - a.messages[a.messages.length - 1].time)
+        _chats.map((chat, index)=>{
+            _chats[index]._id = index;
+        })
+        this.chats = _chats;
+    }
+
     setToDefault(){
         this.chats = [];
         this.stage = Stage.List;

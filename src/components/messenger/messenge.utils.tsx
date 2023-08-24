@@ -15,7 +15,7 @@ function getMessagesForUser(username:string, msgs: Message[]){
 }
 
 async function getAvatars(users: string[]){
-    const res = await fetch("http://localhost:5000/file/getavatars", {
+    const res = await fetch(`http://${process.env.REACT_APP_SERVER_IP}/file/getavatars`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
