@@ -1,9 +1,11 @@
-import { ChatElement } from "../../utils/types";
+import { ChatElement, Message } from "../../utils/types";
 import MessageList from "./MessageList";
 import { ChangeEvent, useRef, useState, useEffect } from 'react';
 import ChatControls from './ChatControls';
 import socket from "../../store/socket";
 import { observer } from "mobx-react-lite"
+import chats from "../../store/chats";
+import uniqid from "uniqid";
 
 interface Props{
     chat: ChatElement | null,
@@ -13,9 +15,31 @@ interface Props{
 function Chat({chat, back}:Props){
 
     const chatRef = useRef<HTMLDivElement>(null)
-    
-    function sendMessage(msg:string, type: string = "text"){
-        if(socket.socket && chat){
+    function sendMessage(msg:string, id: number, type: string = "text"){
+        let unid = uniqid();
+        if(socket.socket && socket.username && chat){
+            let msgBody : string = msg;
+            if(type == "img"){
+                msgBody = "Sending photo..."
+            }
+            const message: Message = {
+                _id: unid,
+                time: Date.now(),
+                body: JSON.stringify(msgBody),
+                from: socket.username,
+                to: chat.person.username,
+                type: "text",
+                mark: unid,
+            }
+            chats.setChats(chats.chats.map((chat)=>{
+                if(chat._id == id){
+                    chat.messages = [...chat.messages, message]
+                    return chat
+                }else{
+                    return chat;
+                }
+            }))
+            chats.sortByTime();
             let token = socket.token;
             socket.socket.send(JSON.stringify({
                 username: socket.username,
@@ -24,7 +48,10 @@ function Chat({chat, back}:Props){
                 to: chat.person.username,
                 body: msg,
                 type: type,
-              }))
+                mark: [id, unid],
+                }))
+        } else{
+            return;
         }
     }
 

@@ -55,11 +55,11 @@ function MenuSlider(){
     return(
         <React.Fragment>
             <div className="flex z-10 mb-1 h-fit w-fit flex-row justify-center items-center cursor-pointer" onClick={()=>changeStage()}>
-                <span className="pr-4 rounded-sm bg-[#000000] text-white text-xl noselect">L</span>
+                <span className="pr-4 rounded-sm bg-[#293133] text-white text-xl noselect">L</span>
                 <div className="flex items-center bg-white h-[2px] w-28 pl-1 pr-1">
                     <button ref={changeButtonRef} className="relative transition-transform duration-700 w-[51px] bg-[#3C6E71] rounded-md h-[18px]"></button>
                 </div>
-                <span className="pl-4 rounded-sm bg-[#000000] text-white text-xl noselect">R</span>
+                <span className="pl-4 rounded-sm bg-[#293133] text-white text-xl noselect">R</span>
             </div>
             <div className="flex flex-row  h-[210px] w-[216px] justify-center">
                 <div ref={errorRef} className="absolute opacity-0 transition-opacity auth-trans flex items-center bg-[#353535] border border-solid border-[#fd8a43] rounded-md w-[216px] h-[210px]"> 

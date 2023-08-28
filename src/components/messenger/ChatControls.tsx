@@ -6,7 +6,7 @@ interface Props{
     id: number,
     input?: string,
     chatRef: React.RefObject<HTMLDivElement>,
-    submit: (msg:string, type?: string)=>void,
+    submit: (msg:string, id: number, type?: string, )=>void,
 }
 
 function ChatControls({submit, chatRef, id, input}:Props){
@@ -132,7 +132,7 @@ function ChatControls({submit, chatRef, id, input}:Props){
         
         reader.onload = function () {
             if(typeof(reader.result) === "string"){
-                submit(reader.result, "img")
+                submit(reader.result, id, "img")
             }
         }
         reader.readAsDataURL(file);
@@ -177,7 +177,7 @@ function ChatControls({submit, chatRef, id, input}:Props){
         msg = JSON.stringify(text)
         setMsgInput("");
         console.log(msg);
-        submit(msg);
+        submit(msg, id);
         if(inputRef.current){
             inputRef.current.style.height = "40px";
         }

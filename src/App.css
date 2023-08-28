@@ -51,7 +51,7 @@
 }
 
 body{
-    background: black;
+    background: #293133;
     /* background: linear-gradient(180deg, rgba(115,161,165,0.47) 0%, rgba(115,161,165,0.47) 85%, rgba(239,232,217,0.695203081232493) 100%);    background-size: cover; */
     background-repeat: no-repeat;
     margin: 0;

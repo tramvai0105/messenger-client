@@ -5,6 +5,7 @@ import socket from '../../store/socket';
 import {useState} from 'react';
 import chats from '../../store/chats';
 import DialogueBox from '../utils/DialogueBox';
+import { observer } from "mobx-react-lite"
 
 interface Props{
     messages: Message[],
@@ -17,7 +18,6 @@ interface MessageBodyProps{
 }
 
 const MessageBody = memo(({message, scroll}: MessageBodyProps) => {
-
     const [dialogue, setDialogue] = useState<boolean>(false)
 
     switch (message.type) {
@@ -41,8 +41,8 @@ const MessageBody = memo(({message, scroll}: MessageBodyProps) => {
     }
 })
 
-const MessageList = memo(({messages, person}:Props) => {
-
+const MessageList = ({messages, person}:Props) => {
+    
     const listRef = useRef<HTMLDivElement>(null);
     const [dial, setDial] = useState<number | null>(1);
     const linkRef = useRef<HTMLDivElement | null>(null)
@@ -125,11 +125,12 @@ const MessageList = memo(({messages, person}:Props) => {
                         <span className='font-bold pr-8'>{message.from}</span>
                     </div>
                     <div className='text-xs flex h-[22px]'>
+                        {(message.mark) ? <h1>Sending...</h1> : <></>}
                         {formatTime(message.time)} 
                         <span className='pl-1 text-lg leading-[6px] cursor-pointer' onClick={(e)=>makeDial(e, index)}>...</span>
                         {(dial == index)
                         ?<div onClick={(e)=>e.stopPropagation()} className='absolute w-fit h-fit p-2 bg-[#3C6E71] rounded-sm right-[10px] top-[12px] translate-x-full flex justify-center'>
-                            {(message.from == socket.username) ? <button onClick={()=>deleteMsg(message)} className='border h-6 border-black rounded-md p-1 bg-gray-100'>Delete</button> : <></>}
+                            {(message.from == socket.username && !message.mark) ? <button onClick={()=>deleteMsg(message)} className='border h-6 border-black rounded-md p-1 bg-gray-100'>Delete</button> : <></>}
                         </div>
                         :<></>}
                     </div>
@@ -140,6 +141,8 @@ const MessageList = memo(({messages, person}:Props) => {
             <span className='pb-2'/>
         </div>
     )
-})
+}
 
-export default MessageList;
+const MessageListObserver = observer(MessageList);
+
+export default MessageListObserver;

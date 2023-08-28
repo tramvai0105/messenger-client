@@ -11,15 +11,16 @@ class Socket{
     avatar : string | undefined = undefined;
     error : string = "";
     flag : boolean = false;
+    reconnecting : boolean = false;
 
     reconnectSocket(){
         console.log("reconnecting");
-        this.makeSocket()
-        setTimeout(() => {
+        setInterval(() => {
             if(this.token && this.socket && this.socket.readyState !== WebSocket.OPEN){
-                this.reconnectSocket();
+                console.log("reconnecting");
+                this.makeSocket();
             }
-        }, 1000);
+        }, 4000);
     }
 
     makeSocket(){
@@ -27,6 +28,7 @@ class Socket{
             this.socket = new WebSocket(`ws://${process.env.REACT_APP_SERVER_IP}`);
             let token = this.token
             this.socket.onopen = () => {
+                this.reconnecting = false;
                 if(this.socket){
                     this.socket.send(JSON.stringify({
                         token,
@@ -35,7 +37,10 @@ class Socket{
                 }
             }
             this.socket.onclose = () => {
-                this.reconnectSocket();
+                if(!this.reconnecting){
+                    this.reconnecting = true;
+                    this.reconnectSocket();
+                }
             }
         }
     }

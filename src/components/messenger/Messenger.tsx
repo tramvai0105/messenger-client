@@ -22,7 +22,6 @@ interface AvatarData {
 }
 
 function Messenger(){
-
     enum Stage {Chat, List};
 
     async function initializeChat(msgs : Message[]){
@@ -85,6 +84,9 @@ function Messenger(){
                 case "delete":
                     deleteMessage(msg);
                     break;
+                case "confirm":
+                    confirmMessage(msg);
+                    break;
                 }
             }
         }   
@@ -122,6 +124,23 @@ function Messenger(){
             }
         }))
         chats.sortByTime();
+    }
+
+    const confirmMessage = (msg: MessageFromSocket)=>{
+        let mark: [number, string];
+        if(msg.mark){
+            mark = msg.mark
+        }
+        else{return;}
+        chats.setChats(chats.chats.map((chat)=>{
+            if(msg.mark && chat._id == mark[0]){
+                chat.messages = chat.messages.filter((message)=> message.mark != mark[1]);
+                return chat
+            } else {
+                return chat
+            }
+        }))
+        saveMessage(msg);
     }
 
     const saveMessage = (msg:MessageFromSocket)=>{

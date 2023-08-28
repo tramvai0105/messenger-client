@@ -17,6 +17,7 @@ export type Message = {
     from:string,
     to:string,
     type: string,
+    mark?: string,
 }
 
 export type MessageFromSocket = {
@@ -27,4 +28,5 @@ export type MessageFromSocket = {
     to:string,
     from: string,
     type: string,
+    mark?: [number, string],
 }

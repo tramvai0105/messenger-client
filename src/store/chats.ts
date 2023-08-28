@@ -73,7 +73,6 @@ class Chats{
         for(let i = 0; i < chats.length; i++){
             console.log(chats[i].person.username, person);
             if(chats[i].person.username == person){
-                console.log(chats[i].messages, _id);
                 chats[i].messages = chats[i].messages.filter(msg => msg._id != _id)
             }
         }
