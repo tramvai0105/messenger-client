@@ -69,7 +69,7 @@ function UsersList(){
             {users?.map((user, i)=>
             // Первое это сообщение при нажатии на добавить друга
             {if(msg.id === i)
-                {return(<div className='flex w-full justify-between bg-[#508b8f] items-center rounded-md pl-2 pr-2 mb-1' key={i}>
+                {return(<div className='flex w-full justify-between bg-[#508b8f] items-center min-h-[40px] rounded-md pl-2 pr-2 mb-1' key={i}>
                     <Avatar r={32} avatar={user.avatar}/>
                     {msg.msg}
                     <span></span>

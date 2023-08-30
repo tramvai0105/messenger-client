@@ -30,7 +30,7 @@ const MessageBody = memo(({message, scroll}: MessageBodyProps) => {
             return(<div className='pl-3 flex flex-col pr-2 text-base whitespace-pre'>
             <span className='pt-1'></span>
                 <DialogueBox display={dialogue} set={setDialogue}>
-                    <img className='w w-auto max-h-[500px]' src={JSON.parse(message.body)}/>
+                    <img className='w-auto max-h-[500px]' src={JSON.parse(message.body)}/>
                 </DialogueBox>
                 <img alt='failed' onLoad={()=>scroll()} onClick={()=>setDialogue(true)} className='w max-w-[270px] h-auto cursor-pointer' src={JSON.parse(message.body)}/>
             </div>)
@@ -122,7 +122,7 @@ const MessageList = ({messages, person}:Props) => {
                     <div className='text-xs flex h-[22px]'>
                         {(message.from != socket.username)?<Avatar r={22} avatar={person.avatar}/> : <Avatar r={22} avatar={socket.avatar}/>} 
                         <span className='p-1'/> 
-                        <span className='font-bold pr-8'>{message.from}</span>
+                        <span className='font-bold text-[14px] pr-8'>{message.from}</span>
                     </div>
                     <div className='text-xs flex h-[22px]'>
                         {(message.mark) ? <h1>Sending...</h1> : <></>}

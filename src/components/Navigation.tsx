@@ -4,6 +4,7 @@ import Header from "./Header";
 import NavButtons from "./NavButtons";
 import Profile from './Profile';
 import { useEffect } from 'react';
+import Credit from "./Credit";
 
 function Navigation(){
     const navigate = useNavigate();
@@ -29,9 +30,7 @@ function Navigation(){
                             <Outlet/>
                         </div>
                     </div>
-                    <div className="absolute ml-4 text-white flex justify-end h-[250px] w-[250px] left-full">
-                        <span className="mr-10 cursor-pointer noselect">crdt</span>
-                    </div>
+                    <Credit/>
                 </div>
             </div>
         </div>

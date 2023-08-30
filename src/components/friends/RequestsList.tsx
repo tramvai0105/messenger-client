@@ -68,14 +68,14 @@ function RequestsList(){
             {requests?.map((request, i)=>
             {if(msg.id === i){
                 return(
-                <div className='w-full flex justify-between items-center bg-[#508b8f] rounded-md pl-2 pr-2 h-10 mb-1' key={i}>
+                <div className='w-full flex min-h-[40px] justify-between items-center bg-[#508b8f] rounded-md pl-2 pr-2 h-10 mb-1' key={i}>
                     <Avatar r={32} avatar={request.avatar}/>
                     {msg.msg}
                     <span></span>
                 </div>)}
             else{
                 return(
-                    <div className='w-full flex justify-between items-center bg-white rounded-md pl-2 pr-2 h-10 mb-1' key={i}>
+                    <div className='w-full min-h-[40px] flex justify-between items-center bg-white rounded-md pl-2 pr-2 h-10 mb-1' key={i}>
                         <Avatar r={32} avatar={request.avatar}/> {request.username}
                         {(socket.token) 
                         ? <FActButton onClick={()=>acceptFriend(request._id, i)}>Add to friends</FActButton>

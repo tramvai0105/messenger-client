@@ -38,8 +38,8 @@ function Logo(){
 
     return(
         <div className="absolute z-30 flex flex-col 
-        items-center justify-between h-full p-5 
-        w-[400px] text-white right-full translate-x-full">
+        items-center justify-between p-5 
+        w-[400px] h-[680px] text-white right-full translate-x-full">
             <LogoCell>E</LogoCell>
             <div className="flex flex-row rotate-[9deg]">
                 <img ref={imgRef} 

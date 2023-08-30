@@ -75,7 +75,7 @@ function FriendsList(){
             {friends?.map((friend, i)=>
             {if(msg.id === i)
                 return(
-                <div className='w-full flex justify-between items-center bg-[#508b8f] rounded-md pl-2 pr-2 h-10 mb-1' key={i}>
+                <div className='w-full min-h-[40px] flex justify-between items-center bg-[#508b8f] rounded-md pl-2 pr-2 h-10 mb-1' key={i}>
                     <Avatar r={32} avatar={friend.avatar}/>
                     <div className='flex flex-row'>
                         {msg.msg}
@@ -84,7 +84,7 @@ function FriendsList(){
                 </div>)
             else{
                 return(
-                    <div className='w-full flex justify-between items-center bg-white rounded-md pl-2 pr-2 h-10 mb-1' key={i}>
+                    <div className='w-full min-h-[40px] flex justify-between items-center bg-white rounded-md pl-2 pr-2 h-10 mb-1' key={i}>
                         <Avatar r={32} avatar={friend.avatar}/> {friend.username}
                         <div className='flex flex-row'>
                             <NewChat username={friend.username}/>
