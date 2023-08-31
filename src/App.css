@@ -114,6 +114,15 @@ body{
   filter: invert(100%) sepia(1%) saturate(5651%) hue-rotate(318deg) brightness(98%) contrast(90%);
 }
 
+.option-button{
+  display: block;
+  background-image: url("./img/option.svg");
+  background-size: 22px;
+  height: 22px;
+  width: 22px;
+  filter: invert(100%) sepia(1%) saturate(5651%) hue-rotate(318deg) brightness(98%) contrast(90%);
+}
+
 .chat-input{
     height: inherit;
     resize: none;

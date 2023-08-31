@@ -18,7 +18,7 @@ function Chat({chat, back}:Props){
     function sendMessage(msg:string, id: number, type: string = "text"){
         let unid = uniqid();
         if(socket.socket && socket.username && chat){
-            let msgBody : string = msg;
+            let msgBody : string = JSON.parse(msg);
             if(type == "img"){
                 msgBody = "Sending photo..."
             }

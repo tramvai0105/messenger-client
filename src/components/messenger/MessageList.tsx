@@ -19,7 +19,7 @@ interface MessageBodyProps{
 
 const MessageBody = memo(({message, scroll}: MessageBodyProps) => {
     const [dialogue, setDialogue] = useState<boolean>(false)
-
+    
     switch (message.type) {
         case "text":
             return(<div className='pl-3 pr-2 text-base whitespace-pre'>

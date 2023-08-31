@@ -107,7 +107,7 @@ function ChatList({chats, select}:Props){
     return(
         <div className="h-full flex flex-col bg-[#D9D9D9]">
             {(chats.length > 0)?
-            <div className="w-full h-[35px] min-h-[35px] bg-[#353535] flex items-center">
+            <div className="w-full h-[35px] min-h-[35px] bg-[#353535] flex items-center border-t-[1px] border-white">
                 <h1 className="ml-2 text-white noselect text-lg">Chat</h1>
                 <input value={input} onChange={(e)=>{filterList(e.target.value.toLowerCase()); setInput(e.target.value)}} placeholder="Search" typeof="text" className="ml-2 w-[70%] h-[70%] rounded-md box-border pl-2"/>
                 {(input)?<span className="text-gray-600 -translate-x-5 font-bold noselect cursor-pointer" onClick={()=>{
